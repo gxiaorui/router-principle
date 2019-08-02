@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <a href="javascript:;" data-to="/">首页</a>
+    <a href="javascript:;" data-to="/home">home</a>
+    <a href="javascript:;" data-to="/index">index</a>
+    <div id="content"></div>
+    <script>
+        class Router{
+            constructor({routes}){
+                this.routes=routes
+                this.aclick()
+                this.init()
+            }
+            init(){
+                window.addEventListener('popstate',this.popfun.bind(this))
+            }
+            popfun(){
+                let content =document.getElementById("content")
+                content.innerHTML = this.routes.filter(val => val.path===topath)[0].component
+                
+            }
+            aclick(){
+                let pushA = [...document.querySelectorAll('a')];
+                pushA.forEach(item => {
+                    item.addEventListener("click", ()=> {
+                        let topath = item.getAttribute('data-to')
+                        console.log(this.routes)
+                        window.history.pushState({}, null, topath)
+                        this.popfun()
+                    })
+                })
+            }
+        }
+        new Router({
+            routes:[
+                {
+                    path:'/',
+                    component:'首页'
+                },
+                {
+                    path:'/home',
+                    component:'home'
+                },
+                {
+                    path:'/index',
+                    component:'index'
+                }
+            ]
+        })
+    </script>
+</body>
+</html>
